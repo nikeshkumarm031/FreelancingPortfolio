@@ -1,11 +1,10 @@
-import adapter from '@sveltejs/adapter-vercel';
+import adapter from '@sveltejs/adapter-static';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
 export default {
   kit: {
-    adapter: adapter({
-      runtime: 'nodejs18.x'
-    })
+    adapter: adapter(),
+    paths: { base: '' }
   },
   preprocess: vitePreprocess()
 };
