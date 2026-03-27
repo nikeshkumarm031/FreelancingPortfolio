@@ -3,10 +3,9 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 
 export default {
   kit: {
-    adapter: adapter(),
-    paths: {
-      base: ''
-    }
+    adapter: adapter({
+      runtime: 'nodejs18.x'
+    })
   },
   preprocess: vitePreprocess()
 };
