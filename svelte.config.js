@@ -1,11 +1,9 @@
-import adapter from '@sveltejs/adapter-static';
+import adapter from '@sveltejs/adapter-vercel';
 import { vitePreprocess } from '@sveltejs/kit/vite';
 
 export default {
   kit: {
-    adapter: adapter({
-      strict: false
-    }),
+    adapter: adapter(),
     paths: {
       base: ''
     }
