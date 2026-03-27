@@ -1,6 +1,34 @@
 <script>
     import CaseStudyCard from './CaseStudyCard.svelte';
 
+    function scrollToSection(sectionId) {
+        // Remove the # from the ID
+        const baseId = sectionId.replace('#', '');
+        
+        // Get all elements with this ID (there should be 2: mobile and desktop)
+        const allElements = document.querySelectorAll(`[id="${baseId}"]`);
+        
+        let targetElement = null;
+        
+        // Find the element that is actually visible (display not none)
+        for (let element of allElements) {
+            const computedStyle = window.getComputedStyle(element);
+            if (computedStyle.display !== 'none') {
+                targetElement = element;
+                break;
+            }
+        }
+        
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    function handleAuditClick(event) {
+        event.preventDefault();
+        scrollToSection('#contact');
+    }
+
     let caseStudies = [
         {
             name: "Cleaning Service",
@@ -45,7 +73,40 @@
     ];
 </script>
 
-<section id="case-studies" class="py-20 lg:py-32 flex flex-col gap-16">
+<!-- MOBILE VERSION (new) -->
+<section id="case-studies" class="block md:hidden py-20 lg:py-32 flex flex-col gap-6">
+    <div class="flex flex-col gap-1 text-center">
+        <h6 class="text-large sm:text-xl md:text-2xl text-violet-400 poppins font-semibold">
+            Proven Results
+        </h6>
+        <h2 class="font-semibold text-4xl sm:text-5xl md:text-6xl">
+            How I've Helped Businesses <span class="text-violet-400">Grow</span>
+        </h2>
+        <p class="text-7lg text-gray-300 max-w-2xl mx-auto pt-4">
+            Real businesses. Real results. See how website development and SEO transformed their growth.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-2">
+        {#each caseStudies as caseStudy}
+            <CaseStudyCard {caseStudy} />
+        {/each}
+    </div>
+
+    <div class="text-center pt-1">
+        <p class="text-gray-300 mb-4">Ready to see similar results for your business?</p>
+        <a
+            href="#contact"
+            on:click={handleAuditClick}
+            class="blueShadow inline-block px-8 py-4 rounded-lg bg-violet-600 text-white font-semibold hover:bg-violet-500 transition duration-200 poppins"
+        >
+            Get Your Free Website Audit
+        </a>
+    </div>
+</section>
+
+<!-- DESKTOP VERSION (old) -->
+<section id="case-studies" class="hidden md:flex py-20 lg:py-32 flex-col gap-16">
     <div class="flex flex-col gap-4 text-center">
         <h6 class="text-large sm:text-xl md:text-2xl text-violet-400 poppins font-semibold">
             Proven Results
@@ -58,18 +119,17 @@
         </p>
     </div>
 
-    <!-- Case Studies Grid -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
         {#each caseStudies as caseStudy}
             <CaseStudyCard {caseStudy} />
         {/each}
     </div>
 
-    <!-- Bottom CTA -->
     <div class="text-center pt-8">
         <p class="text-gray-300 mb-4">Ready to see similar results for your business?</p>
         <a
-            href="#audit"
+            href="#contact"
+            on:click={handleAuditClick}
             class="blueShadow inline-block px-8 py-4 rounded-lg bg-violet-600 text-white font-semibold hover:bg-violet-500 transition duration-200 poppins"
         >
             Get Your Free Website Audit

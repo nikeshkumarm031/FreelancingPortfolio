@@ -7,11 +7,43 @@
         { name: "Services", link: "#services" },
         { name: "Case Studies", link: "#case-studies" },
         { name: "Why Choose Me", link: "#why-choose-me" },
-        { name: "Contact", link: "#ready-to-grow" },
+        { name: "Contact", link: "#contact" },
     ];
     
     function closeMobileMenu() {
         isMobileMenuOpen = false;
+    }
+
+    function scrollToSection(sectionId) {
+        // Remove the # from the ID
+        const baseId = sectionId.replace('#', '');
+        
+        // Get all elements with this ID (there should be 2: mobile and desktop)
+        const allElements = document.querySelectorAll(`[id="${baseId}"]`);
+        
+        let targetElement = null;
+        
+        // Find the element that is actually visible (display not none)
+        for (let element of allElements) {
+            const computedStyle = window.getComputedStyle(element);
+            if (computedStyle.display !== 'none') {
+                targetElement = element;
+                break;
+            }
+        }
+        
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+            closeMobileMenu();
+        }
+    }
+
+    function handleNavigation(event) {
+        const href = event.currentTarget.getAttribute('href');
+        if (href && href.startsWith('#')) {
+            event.preventDefault();
+            scrollToSection(href);
+        }
     }
 </script>
 
@@ -28,16 +60,17 @@
     </h1>
     
     <!-- Desktop Navigation -->
-    <div class="sm:flex items-center gap-4 hidden">
+    <nav class="hidden sm:flex items-center gap-8">
         {#each tabs as tab}
             <a
                 href={tab.link}
-                class="duration-200 hover:text-violet-400"
+                on:click={handleNavigation}
+                class="text-white font-medium duration-200 hover:text-violet-400 transition-colors"
             >
-                <p>{tab.name}</p>
+                {tab.name}
             </a>
         {/each}
-    </div>
+    </nav>
     
     <!-- Mobile Hamburger Menu -->
     <div class="sm:hidden relative">
@@ -65,8 +98,8 @@
                     {#each tabs as tab}
                         <a
                             href={tab.link}
-                            on:click={closeMobileMenu}
-                            class="px-4 py-2 text-violet-400 hover:bg-slate-800 rounded-lg transition duration-200 font-medium"
+                            on:click={handleNavigation}
+                            class="px-4 py-2 text-violet-400 hover:bg-slate-800 rounded-lg transition duration-200 font-medium text-left block"
                         >
                             {tab.name}
                         </a>

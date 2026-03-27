@@ -27,8 +27,42 @@
     ];
 </script>
 
-<section id="why-choose-me" class="py-20 lg:py-32 flex flex-col gap-16">
-    <!-- Header -->
+<section id="why-choose-me" class="block md:hidden py-20 lg:py-32 flex flex-col gap-6">
+
+    <div class="flex flex-col gap-2 text-center">
+        <h6 class="text-large sm:text-xl md:text-2xl text-violet-400 poppins font-semibold">
+            Why Businesses Choose Me
+        </h6>
+        <h2 class="font-semibold text-4xl sm:text-5xl md:text-6xl">
+            More Than Just a Web <span class="text-violet-400">Developer</span>
+        </h2>
+        <p class="text-5lg text-gray-300 max-w-2xl mx-auto pt-1">
+            I combine technical expertise with business strategy to help you achieve real results.
+        </p>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+        {#each benefits as benefit, index}
+            <div class="flex flex-col gap-2 p-4 rounded-xl border border-violet-700/50 hover:border-violet-400 transition duration-200 group hover:bg-slate-900/30">
+
+                <div class="w-8 h-8 rounded-lg bg-violet-600/20 border border-violet-600 flex items-center justify-center">
+                    <span class="text-violet-400 font-bold poppins text-lg">0{index + 1}</span>
+                </div>
+
+                <h3 class="text-xl font-semibold group-hover:text-violet-400 transition">
+                    {benefit.title}
+                </h3>
+
+                <p class="text-gray-300 flex-1">
+                    {benefit.description}
+                </p>
+            </div>
+        {/each}
+    </div>
+
+</section>
+<section id="why-choose-me" class="hidden md:flex py-20 lg:py-32 flex-col gap-16">
+
     <div class="flex flex-col gap-4 text-center">
         <h6 class="text-large sm:text-xl md:text-2xl text-violet-400 poppins font-semibold">
             Why Businesses Choose Me
@@ -41,25 +75,25 @@
         </p>
     </div>
 
-    <!-- Benefits Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {#each benefits as benefit, index}
             <div class="flex flex-col gap-4 p-8 rounded-xl border border-violet-700/50 hover:border-violet-400 transition duration-200 group hover:bg-slate-900/30">
-                <!-- Number Badge -->
+
                 <div class="w-12 h-12 rounded-lg bg-violet-600/20 border border-violet-600 flex items-center justify-center">
                     <span class="text-violet-400 font-bold poppins text-lg">0{index + 1}</span>
                 </div>
 
-                <!-- Title & Description -->
                 <h3 class="text-xl font-semibold group-hover:text-violet-400 transition">
                     {benefit.title}
                 </h3>
+
                 <p class="text-gray-300 flex-1">
                     {benefit.description}
                 </p>
             </div>
         {/each}
     </div>
+
 </section>
 
 <style>

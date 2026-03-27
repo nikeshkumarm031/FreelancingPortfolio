@@ -1,3 +1,33 @@
+<script>
+    function scrollToSection(sectionId) {
+        // Remove the # from the ID
+        const baseId = sectionId.replace('#', '');
+        
+        // Get all elements with this ID (there should be 2: mobile and desktop)
+        const allElements = document.querySelectorAll(`[id="${baseId}"]`);
+        
+        let targetElement = null;
+        
+        // Find the element that is actually visible (display not none)
+        for (let element of allElements) {
+            const computedStyle = window.getComputedStyle(element);
+            if (computedStyle.display !== 'none') {
+                targetElement = element;
+                break;
+            }
+        }
+        
+        if (targetElement) {
+            targetElement.scrollIntoView({ behavior: 'smooth' });
+        }
+    }
+
+    function handleAuditClick(event) {
+        event.preventDefault();
+        scrollToSection('#contact');
+    }
+</script>
+
 <footer
     id="ready-to-grow"
     class="py-20 sm:py-32 bg-black border-t border-solid border-violet-950 flex flex-col gap-8 justify-center items-center"
@@ -14,7 +44,8 @@
     <!-- CTA Buttons -->
     <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
         <a
-            href="#ready-to-grow"
+            href="#contact"
+            on:click={handleAuditClick}
             class="blueShadow px-8 py-3 rounded-lg bg-violet-600 text-white font-semibold hover:bg-violet-500 transition duration-200"
         >
             Get Free Website Audit
