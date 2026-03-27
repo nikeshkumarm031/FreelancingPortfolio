@@ -53,7 +53,12 @@
         <!-- Mobile Menu Dropdown -->
         {#if isMobileMenuOpen}
             <div 
+                role="menu"
+                tabindex="0"
                 on:click|stopPropagation
+                on:keydown={(e) => {
+                    if (e.key === 'Escape') isMobileMenuOpen = false;
+                }}
                 class="absolute top-full right-0 mt-2 bg-slate-900 border border-violet-700 rounded-lg shadow-2xl p-4 w-48 z-50"
             >
                 <div class="flex flex-col gap-3">
