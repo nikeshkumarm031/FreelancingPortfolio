@@ -3,8 +3,14 @@ import { vitePreprocess } from '@sveltejs/kit/vite';
 
 export default {
   kit: {
-    adapter: adapter(),
-    paths: { base: '' }
+    adapter: adapter({
+      pages: 'build',
+      assets: 'build',
+      fallback: 'index.html'  // keep this for SPA routing
+    }),
+    paths: {
+      base: ''
+    }
   },
   preprocess: vitePreprocess()
 };
