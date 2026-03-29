@@ -187,14 +187,14 @@
                                 type="button"
                                 on:click|stopPropagation={() => isCountryDropdownOpen = !isCountryDropdownOpen}
                                 on:blur={() => setTimeout(() => isCountryDropdownOpen = false, 200)}
-                                class="px-0.3 py-3 bg-slate-800 border border-violet-700 text-white rounded-lg hover:border-violet-400 transition whitespace-nowrap flex items-center gap-2"
+                                class="px-2 sm:px-3 py-3 bg-slate-800 border border-violet-700 text-white rounded-lg hover:border-violet-400 transition flex items-center justify-center gap-1 sm:gap-2 min-w-fit"
                             >
                                 {#if selectedCountry}
-                                    <span class="font-semibold text-violet-300">{selectedCountry.code}</span>
+                                    <span class="font-semibold text-violet-300 text-sm sm:text-base">{selectedCountry.code}</span>
                                 {:else}
-                                    <span class="text-gray-400">Select country</span>
+                                    <span class="text-gray-400 text-xs sm:text-sm">Select</span>
                                 {/if}
-                                <i class="fa-solid fa-chevron-down text-xs ml-2"></i>
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
                             </button>
                             
                             <!-- Autocomplete Dropdown - Mobile -->
@@ -410,14 +410,14 @@
                                 type="button"
                                 on:click|stopPropagation={() => isCountryDropdownOpen = !isCountryDropdownOpen}
                                 on:blur={() => setTimeout(() => isCountryDropdownOpen = false, 200)}
-                                class="px-4 py-3 bg-slate-800 border border-violet-700 text-white rounded-lg hover:border-violet-400 transition whitespace-nowrap flex items-center gap-2"
+                                class="px-3 sm:px-4 py-3 bg-slate-800 border border-violet-700 text-white rounded-lg hover:border-violet-400 transition flex items-center justify-center gap-1 sm:gap-2 min-w-fit"
                             >
                                 {#if selectedCountry}
-                                    <span class="font-semibold text-violet-300">{selectedCountry.code}</span>
+                                    <span class="font-semibold text-violet-300 text-sm sm:text-base">{selectedCountry.code}</span>
                                 {:else}
-                                    <span class="text-gray-400">Select country</span>
+                                    <span class="text-gray-400 text-xs sm:text-sm">Select</span>
                                 {/if}
-                                <i class="fa-solid fa-chevron-down text-xs ml-2"></i>
+                                <i class="fa-solid fa-chevron-down text-xs"></i>
                             </button>
                             
                             <!-- Autocomplete Dropdown -->
