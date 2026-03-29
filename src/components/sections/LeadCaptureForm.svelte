@@ -1,4 +1,6 @@
 <script>
+    import { onMount } from 'svelte';
+
     let formData = {
         name: '',
         email: '',
@@ -96,6 +98,37 @@
         isCountryDropdownOpen = false;
     }
 
+    async function detectCountryFromLocation() {
+        try {
+            // Use IP-based geolocation service
+            const response = await fetch('https://ipapi.co/json/');
+            const data = await response.json();
+            
+            const countryCode = data.country_code?.toUpperCase();
+            if (!countryCode) return;
+
+            // Map ISO country codes to phone codes
+            const countryCodeMap = {
+                'US': '+1', 'CA': '+1', 'GB': '+44', 'IN': '+91', 'AU': '+61',
+                'FR': '+33', 'DE': '+49', 'IT': '+39', 'ES': '+34', 'NL': '+31',
+                'SE': '+46', 'NO': '+47', 'DK': '+45', 'CH': '+41', 'AT': '+43',
+                'BE': '+32', 'FI': '+358', 'IE': '+353', 'NZ': '+64', 'SG': '+65',
+                'MY': '+60', 'TH': '+66', 'ID': '+62', 'JP': '+81', 'CN': '+86', 'KR': '+82'
+            };
+
+            const phoneCode = countryCodeMap[countryCode];
+            if (phoneCode && !formData.countryCode) {
+                selectCountry(phoneCode);
+            }
+        } catch (error) {
+            console.log('Error detecting location from IP:', error);
+        }
+    }
+
+    onMount(() => {
+        detectCountryFromLocation();
+    });
+
     $: selectedCountry = countryCodes.find(c => c.code === formData.countryCode);
 </script>
 
@@ -116,21 +149,6 @@
     <!-- MOBILE FORM -->
     <div class="max-w-2xl mx-auto w-full">
         <div class="p-4 sm:p-12 rounded-xl border border-violet-700 bg-slate-900/50 backdrop-blur">
-
-            {#if submitSuccess}
-                <div class="p-4 bg-green-900/20 border border-green-600 rounded-lg text-green-300 mb-6">
-                    <i class="fa-solid fa-check mr-2"></i>
-                    Thank you! I'll review your business and reach out within 24 hours.
-                </div>
-            {/if}
-
-            {#if submitError}
-                <div class="p-4 bg-red-900/20 border border-red-600 rounded-lg text-red-300 mb-6">
-                    <i class="fa-solid fa-exclamation-circle mr-2"></i>
-                    {submitError}
-                </div>
-            {/if}
-
             <form on:submit={handleSubmit} class="flex flex-col gap-6">
                 <!-- Name -->
                 <div class="flex flex-col gap-2">
@@ -172,22 +190,51 @@
                                 class="px-0.3 py-3 bg-slate-800 border border-violet-700 text-white rounded-lg hover:border-violet-400 transition whitespace-nowrap flex items-center gap-2"
                             >
                                 {#if selectedCountry}
-                                    <span>{selectedCountry.country.split(' ').slice(0, 3).join(' ')}</span>
-                                    <span class="font-semibold text-violet-300">({selectedCountry.code})</span>
+                                    <span class="font-semibold text-violet-300">{selectedCountry.code}</span>
                                 {:else}
                                     <span class="text-gray-400">Select country</span>
                                 {/if}
                                 <i class="fa-solid fa-chevron-down text-xs ml-2"></i>
                             </button>
                             
-                            <!-- Autocomplete Dropdown -->
+                            <!-- Autocomplete Dropdown - Mobile -->
                             {#if isCountryDropdownOpen}
                                 <div 
                                     role="listbox"
                                     tabindex="-1"
                                     on:click|stopPropagation
                                     on:keydown|stopPropagation
-                                    class="absolute top-full left-0 mt-1 bg-slate-800 border border-violet-700 rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto w-full"
+                                    class="md:hidden fixed inset-x-4 top-1/2 -translate-y-1/2 bg-slate-800 border border-violet-700 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto"
+                                >
+                                    {#each countryCodes as country (country.code + country.abbr)}
+                                        <button
+                                            type="button"
+                                            role="option"
+                                            aria-selected={formData.countryCode === country.code}
+                                            on:click={() => {
+                                                selectCountry(country.code);
+                                                isCountryDropdownOpen = false;
+                                            }}
+                                            class="w-full px-4 py-3 text-left hover:bg-slate-700 transition flex items-center gap-3 border-b border-slate-700 last:border-b-0 {formData.countryCode === country.code ? 'bg-violet-900/40 border-l-2 border-l-violet-400' : ''}"
+                                        >
+                                            <span class="text-lg" aria-hidden="true">{country.flag}</span>
+                                            <div class="flex-1">
+                                                <div class="text-white text-sm">{country.country}</div>
+                                                <div class="text-gray-400 text-xs">{country.code}</div>
+                                            </div>
+                                        </button>
+                                    {/each}
+                                </div>
+                            {/if}
+
+                            <!-- Autocomplete Dropdown - Desktop -->
+                            {#if isCountryDropdownOpen}
+                                <div 
+                                    role="listbox"
+                                    tabindex="-1"
+                                    on:click|stopPropagation
+                                    on:keydown|stopPropagation
+                                    class="hidden md:block absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-slate-800 border border-violet-700 rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto min-w-80"
                                 >
                                     {#each countryCodes as country (country.code + country.abbr)}
                                         <button
@@ -275,6 +322,20 @@
                     {/if}
                 </button>
 
+                {#if submitSuccess}
+                    <div class="p-4 bg-green-900/20 border border-green-600 rounded-lg text-green-300">
+                        <i class="fa-solid fa-check mr-2"></i>
+                        Thank you! I'll review your business and reach out within 24 hours.
+                    </div>
+                {/if}
+
+                {#if submitError}
+                    <div class="p-4 bg-red-900/20 border border-red-600 rounded-lg text-red-300">
+                        <i class="fa-solid fa-exclamation-circle mr-2"></i>
+                        {submitError}
+                    </div>
+                {/if}
+
                 <p class="text-center text-sm text-gray-400 pt-2">
                     I typically respond within 24 hours on business days.
                 </p>
@@ -310,21 +371,6 @@
     <!-- DESKTOP FORM -->
     <div class="max-w-2xl mx-auto w-full">
         <div class="p-8 sm:p-12 rounded-xl border border-violet-700 bg-slate-900/50 backdrop-blur">
-
-            {#if submitSuccess}
-                <div class="p-4 bg-green-900/20 border border-green-600 rounded-lg text-green-300 mb-6">
-                    <i class="fa-solid fa-check mr-2"></i>
-                    Thank you! I'll review your business and reach out within 24 hours.
-                </div>
-            {/if}
-
-            {#if submitError}
-                <div class="p-4 bg-red-900/20 border border-red-600 rounded-lg text-red-300 mb-6">
-                    <i class="fa-solid fa-exclamation-circle mr-2"></i>
-                    {submitError}
-                </div>
-            {/if}
-
             <form on:submit={handleSubmit} class="flex flex-col gap-6">
                 <!-- Name -->
                 <div class="flex flex-col gap-2">
@@ -367,8 +413,7 @@
                                 class="px-4 py-3 bg-slate-800 border border-violet-700 text-white rounded-lg hover:border-violet-400 transition whitespace-nowrap flex items-center gap-2"
                             >
                                 {#if selectedCountry}
-                                    <span>{selectedCountry.country.split(' ').slice(0, 3).join(' ')}</span>
-                                    <span class="font-semibold text-violet-300">({selectedCountry.code})</span>
+                                    <span class="font-semibold text-violet-300">{selectedCountry.code}</span>
                                 {:else}
                                     <span class="text-gray-400">Select country</span>
                                 {/if}
@@ -382,7 +427,34 @@
                                     tabindex="-1"
                                     on:click|stopPropagation
                                     on:keydown|stopPropagation
-                                    class="absolute top-full left-0 mt-1 bg-slate-800 border border-violet-700 rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto w-full"
+                                    class="md:hidden fixed inset-x-4 top-1/2 -translate-y-1/2 bg-slate-800 border border-violet-700 rounded-lg shadow-lg z-50 max-h-96 overflow-y-auto"
+                                >
+                                    {#each countryCodes as country (country.code + country.abbr)}
+                                        <button
+                                            type="button"
+                                            role="option"
+                                            aria-selected={formData.countryCode === country.code}
+                                            on:click={() => {
+                                                selectCountry(country.code, country.abbr);
+                                                isCountryDropdownOpen = false;
+                                            }}
+                                            class="w-full px-4 py-3 text-left hover:bg-slate-700 transition flex items-center gap-3 border-b border-slate-700 last:border-b-0 {formData.countryCode === country.code ? 'bg-violet-900/40 border-l-2 border-l-violet-400' : ''}"
+                                        >
+                                            <span class="text-lg" aria-hidden="true">{country.flag}</span>
+                                            <div class="flex-1">
+                                                <div class="text-white text-sm">{country.country}</div>
+                                                <div class="text-gray-400 text-xs">{country.code}</div>
+                                            </div>
+                                        </button>
+                                    {/each}
+                                </div>
+
+                                <div 
+                                    role="listbox"
+                                    tabindex="-1"
+                                    on:click|stopPropagation
+                                    on:keydown|stopPropagation
+                                    class="hidden md:block absolute top-full left-1/2 -translate-x-1/2 mt-1 bg-slate-800 border border-violet-700 rounded-lg shadow-lg z-50 max-h-64 overflow-y-auto min-w-80"
                                 >
                                     {#each countryCodes as country (country.code + country.abbr)}
                                         <button
@@ -469,6 +541,20 @@
                         Get Your Free Website Audit
                     {/if}
                 </button>
+
+                {#if submitSuccess}
+                    <div class="p-4 bg-green-900/20 border border-green-600 rounded-lg text-green-300">
+                        <i class="fa-solid fa-check mr-2"></i>
+                        Thank you! I'll review your business and reach out within 24 hours.
+                    </div>
+                {/if}
+
+                {#if submitError}
+                    <div class="p-4 bg-red-900/20 border border-red-600 rounded-lg text-red-300">
+                        <i class="fa-solid fa-exclamation-circle mr-2"></i>
+                        {submitError}
+                    </div>
+                {/if}
 
                 <p class="text-center text-sm text-gray-400 pt-2">
                     I typically respond within 24 hours on business days.
