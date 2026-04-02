@@ -6,8 +6,13 @@ export default {
     adapter: adapter({
       pages: 'build',
       assets: 'build',
-      fallback: 'index.html'  // keep this for SPA routing
+      fallback: 'index.html',
+      strict: false
     }),
+    prerender: {
+      crawl: true,
+      entries: ['/', '/sitemap.xml', '/robots.txt']
+    },
     paths: {
       base: ''
     }
