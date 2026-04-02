@@ -100,11 +100,29 @@
 
     async function detectCountryFromLocation() {
         try {
-            // Use IP-based geolocation service
-            const response = await fetch('https://ipapi.co/json/');
-            const data = await response.json();
+            // Try multiple geolocation services with CORS support
+            let countryCode = null;
             
-            const countryCode = data.country_code?.toUpperCase();
+            // Try 1: geolocation-db.com (good CORS support)
+            try {
+                const response = await fetch('https://geolocation-db.com/json/');
+                const data = await response.json();
+                countryCode = data.country_code?.toUpperCase();
+            } catch (e) {
+                console.log('geolocation-db failed, trying alternative...');
+            }
+
+            // Try 2: geojs.io (excellent CORS support)
+            if (!countryCode) {
+                try {
+                    const response = await fetch('https://get.geojs.io/geolocation/ip/geo.json');
+                    const data = await response.json();
+                    countryCode = data.country_code?.toUpperCase();
+                } catch (e) {
+                    console.log('geojs fallback failed');
+                }
+            }
+
             if (!countryCode) return;
 
             // Map ISO country codes to phone codes
@@ -122,6 +140,7 @@
             }
         } catch (error) {
             console.log('Error detecting location from IP:', error);
+            // Silently fail - user can manually select country
         }
     }
 
