@@ -18,17 +18,17 @@
     <meta property="og:title" content="Website Developer & SEO Specialist | Grow Your Local Business Online" />
     <meta property="og:description" content="I help local businesses build converting websites, rank on Google, and automate operations. Free website audit included." />
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://yourwebsite.com" />
-    <meta property="og:image" content="%sveltekit.assets%/images/profile.png" />
+    <meta property="og:url" content="https://nickfreelancer.vercel.app" />
+    <meta property="og:image" content="https://nickfreelancer.vercel.app/images/profile.png" />
 
     <!-- Twitter Card -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content="Website Developer & SEO Specialist" />
     <meta name="twitter:description" content="Professional websites that convert visitors into customers for local businesses." />
-    <meta name="twitter:image" content="%sveltekit.assets%/images/profile.png" />
+    <meta name="twitter:image" content="https://nickfreelancer.vercel.app/images/profile.png" />
 
     <!-- Canonical URL -->
-    <link rel="canonical" href="https://yourwebsite.com" />
+    <link rel="canonical" href="https://nickfreelancer.vercel.app" />
 
     <!-- Schema Markup for Service Business -->
     <script type="application/ld+json">
@@ -37,9 +37,9 @@
             "@type": "LocalBusiness",
             "name": "Nikesh Kumar - Web Developer & SEO Specialist",
             "description": "Professional website development and SEO services for local businesses",
-            "url": "https://yourwebsite.com",
+            "url": "https://nickfreelancer.vercel.app",
             "email": "nikeshkumarm031@gmail.com",
-            "image": "%sveltekit.assets%/images/profile.png",
+            "image": "https://nickfreelancer.vercel.app/images/profile.png",
             "priceRange": "$$",
             "areaServed": {
                 "@type": "GeoShape",
@@ -57,7 +57,7 @@
             "@type": "ProfessionalService",
             "name": "Nikesh Kumar",
             "description": "Website developer and SEO specialist for local businesses",
-            "url": "https://yourwebsite.com",
+            "url": "https://nickfreelancer.vercel.app",
             "contactPoint": {
                 "@type": "ContactPoint",
                 "contactType": "Customer Service",

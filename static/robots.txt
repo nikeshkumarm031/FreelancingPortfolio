@@ -1,0 +1,13 @@
+# Allow all search engines to crawl the entire site
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://nickfreelancer.vercel.app/sitemap.xml
+
+# Crawl delay (optional - milliseconds between requests)
+Crawl-delay: 1
+
+# Disallow googlebot from crawling certain files (optional)
+# User-agent: Googlebot
+# Disallow: /admin/
